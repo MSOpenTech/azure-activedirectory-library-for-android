@@ -50,17 +50,19 @@ android {
         project.archivesBaseName = "adal"
         project.version = android.defaultConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'adal-rules.pro'
     }
     buildTypes {
         debug {
+            minifyEnabled true
             testCoverageEnabled false
             debuggable true
-
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'adal-rules.pro'
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             debuggable false
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'adal-rules.pro'
         }
     }
 
@@ -332,3 +334,6 @@ tasks.whenTaskAdded { task ->
     }
 }
 
+tasks.withType(proguard.gradle.ProGuardTask) {
+  libraryJars libraryjars configurations.findByName('runtimeClasspath').getFiles()
+}
